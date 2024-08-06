@@ -1,21 +1,26 @@
 from typing import List
-from functools import reduce
 
 list_string = input('numbers list separate by ",": ').split(",")
 
 list_numbers = [int(n) for n in list_string]
 
 
-def kidsWithCandies(nums: List[int]) -> List[int]:
+def productExceptSelf(nums: List[int]) -> List[int]:
+    prefix, postfix = 1, 1  # init in one
+    prod_left, prod_right = [], []  # save product
+
+    for i, n in enumerate(nums):
+        prod_left.append(prefix)
+        prefix *= n
+        prod_right.append(postfix)
+        postfix *= nums[len(nums) - 1 - i]
+
     result = []
     for i, _ in enumerate(nums):
-        if i == 0:
-            result.append(reduce((lambda x, y: x * y), nums[i + 1 :]))
-        elif i == (len(nums) - 1):
-            result.append(reduce((lambda x, y: x * y), nums[:i]))
-        else:
-            result.append(reduce((lambda x, y: x * y), nums[:i] + nums[i + 1 :]))
+        prod_result = prod_left[i] * prod_right[len(nums) - 1 - i]
+        result.append(prod_result)
+
     return result
 
 
-print(kidsWithCandies(list_numbers))
+print(productExceptSelf(list_numbers))
